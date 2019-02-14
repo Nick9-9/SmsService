@@ -12,6 +12,8 @@ using WebCustomerApp.Data;
 using WebCustomerApp.Models;
 using WebCustomerApp.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using BAL.Interfaces;
+using DAL.Repositories;
 
 namespace WebCustomerApp
 {
@@ -36,6 +38,14 @@ namespace WebCustomerApp
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<IGenericRepository<Phone>,GenericRepository<Phone>>();
+            services.AddTransient<IGenericRepository<Message>, GenericRepository<Message>>();
+            services.AddTransient<IGenericRepository<MessageRecipient>, GenericRepository<MessageRecipient>>();
+            services.AddTransient<IGenericRepository<ApplicationUser>, GenericRepository<ApplicationUser>>();
+            services.AddTransient<IGenericRepository<AdditInform>, GenericRepository<AdditInform>>();
+
+
+
 
             //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options => {options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");});
 

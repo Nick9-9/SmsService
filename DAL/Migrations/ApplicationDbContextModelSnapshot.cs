@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
 using WebCustomerApp.Data;
 
-namespace WebCustomerApp.Data.Migrations
+namespace DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -128,6 +128,22 @@ namespace WebCustomerApp.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("WebCustomerApp.Models.AdditInform", b =>
+                {
+                    b.Property<int>("AditInfId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("AditionInform");
+
+                    b.Property<int>("PhoneId");
+
+                    b.HasKey("AditInfId");
+
+                    b.HasIndex("PhoneId");
+
+                    b.ToTable("AdditInform");
+                });
+
             modelBuilder.Entity("WebCustomerApp.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -166,8 +182,6 @@ namespace WebCustomerApp.Data.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
 
-                    b.Property<string>("sdfsd");
-
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -179,6 +193,61 @@ namespace WebCustomerApp.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("WebCustomerApp.Models.Message", b =>
+                {
+                    b.Property<int>("MessageId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ApplicationUserId");
+
+                    b.Property<string>("TextMessage");
+
+                    b.HasKey("MessageId");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.ToTable("Message");
+                });
+
+            modelBuilder.Entity("WebCustomerApp.Models.MessageRecipient", b =>
+                {
+                    b.Property<int>("IdMesRec")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("DateCreate");
+
+                    b.Property<DateTime>("DateEnd");
+
+                    b.Property<DateTime>("DateStart");
+
+                    b.Property<int>("MessageId");
+
+                    b.Property<DateTime>("Period");
+
+                    b.Property<int>("PhoneId");
+
+                    b.HasKey("IdMesRec");
+
+                    b.HasIndex("MessageId");
+
+                    b.HasIndex("PhoneId");
+
+                    b.ToTable("MessageRecipient");
+                });
+
+            modelBuilder.Entity("WebCustomerApp.Models.Phone", b =>
+                {
+                    b.Property<int>("PhoneId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("PhoneRecepient")
+                        .IsRequired();
+
+                    b.HasKey("PhoneId");
+
+                    b.ToTable("Phone");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -223,6 +292,34 @@ namespace WebCustomerApp.Data.Migrations
                     b.HasOne("WebCustomerApp.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("WebCustomerApp.Models.AdditInform", b =>
+                {
+                    b.HasOne("WebCustomerApp.Models.Phone", "Phone")
+                        .WithMany("AdditInforms")
+                        .HasForeignKey("PhoneId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("WebCustomerApp.Models.Message", b =>
+                {
+                    b.HasOne("WebCustomerApp.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany("Messages")
+                        .HasForeignKey("ApplicationUserId");
+                });
+
+            modelBuilder.Entity("WebCustomerApp.Models.MessageRecipient", b =>
+                {
+                    b.HasOne("WebCustomerApp.Models.Message", "Message")
+                        .WithMany("MessageRecipients")
+                        .HasForeignKey("MessageId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("WebCustomerApp.Models.Phone", "Phone")
+                        .WithMany("MessageRecipients")
+                        .HasForeignKey("PhoneId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

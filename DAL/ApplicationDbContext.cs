@@ -10,9 +10,19 @@ namespace WebCustomerApp.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) {
+        public DbSet<Phone> Phones { get; set; }
+        public DbSet<AdditInform> AdditInforms { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<MessageRecipient> MessageRecipients { get; set; }
+
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) {
 			Database.EnsureCreated();
 		}
+
+        public ApplicationDbContext()
+        {
+        }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

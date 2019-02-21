@@ -14,6 +14,7 @@ using WebCustomerApp.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using BAL.Interfaces;
 using DAL.Repositories;
+using DAL.Interfaces;
 
 namespace WebCustomerApp
 {
@@ -42,7 +43,8 @@ namespace WebCustomerApp
             services.AddTransient<IGenericRepository<Message>, GenericRepository<Message>>();
             services.AddTransient<IGenericRepository<MessageRecipient>, GenericRepository<MessageRecipient>>();
             services.AddTransient<IGenericRepository<ApplicationUser>, GenericRepository<ApplicationUser>>();
-            services.AddTransient<IGenericRepository<AdditInform>, GenericRepository<AdditInform>>();
+
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
 
 
 

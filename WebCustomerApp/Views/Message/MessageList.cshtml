@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "My Messages";
+}
+@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+<section>
+    <h4>Messages</h4>
+    <table border="1" cellpadding="2" cellspacing="2">
+        <tr>
+            <td align="center"><p>TextMessage</p></td>
+            <td align="center"><p>Recepients</p></td>
+        </tr>
+        
+        @foreach (var mes in ViewBag.MessageListViewModel)
+        {
+            <tr>
+                <td><p>@mes.TextMessage</p></td>
+                <td>
+                    <ul>
+                        @foreach (var phone in mes.MessageListViewModel)
+                        {
+                            <li>@phone</li>
+                        }
+                    </ul>
+                </td>
+            </tr>
+        }
+    </table>
+</section>

@@ -19,6 +19,7 @@ namespace WebCustomerApp.Models
         public int MessageId { get; set; }
         [ForeignKey("MessageId")]
         public Message Message { get; set; }
+
         public int PhoneId { get; set; }
         [ForeignKey("PhoneId")]
         public Phone Phone { get; set; }

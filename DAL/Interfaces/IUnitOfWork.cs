@@ -8,13 +8,12 @@ using WebCustomerApp.Models;
 
 namespace DAL.Interfaces
 {
-    public interface IUnitOfWork : IDisposable
+    public interface IUnitOfWork //: IDisposable
     {
         UserManager<ApplicationUser> UserManagers { get; }
-        GenericRepository<Message> Messages { get; }
-        GenericRepository<MessageRecipient> MessageRecipients { get; }
-        GenericRepository<Phone> Phones { get; }
-        GenericRepository<AdditInform> AdditInforms { get; }
-        void Save();
+        IGenericRepository<Message> Messages { get; }
+        IGenericRepository<MessageRecipient> MessageRecipients { get; }
+        IGenericRepository<Phone> Phones { get; }
+        void SaveChanges();
     }
 }

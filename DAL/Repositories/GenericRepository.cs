@@ -19,7 +19,14 @@ namespace DAL.Repositories
             this.context = context;
             this.dbSet = context.Set<TEntity>();
         }
-
+        public virtual TEntity GetByID(object id)
+        {
+            return dbSet.Find(id);
+        }
+        public void Create(TEntity entity)
+        {
+            dbSet.Add(entity);
+        }
         public void Dispose()
         {
             context?.Dispose();
@@ -28,14 +35,22 @@ namespace DAL.Repositories
         public void Add(TEntity item)
         {
             dbSet.Add(item);
-            context.SaveChanges();
+            //context.SaveChanges();
         }
 
         public TEntity FindById(int id)
         {
             return dbSet.Find(id);
         }
+        public virtual IEnumerable<TEntity> GetAll(Func<TEntity, bool> filter = null)
+        {
+            if (filter != null)
+            {
+                return dbSet.Where(filter);
+            }
 
+            return dbSet.AsEnumerable();
+        }
         public IEnumerable<TEntity> Get()
         {
             return dbSet.ToList();
@@ -57,6 +72,11 @@ namespace DAL.Repositories
             dbSet.Update(item);
             context.SaveChanges();
         }
+        public void SaveChanges()
+        {
+            context.SaveChanges();
+        }
+
     }
 
 }

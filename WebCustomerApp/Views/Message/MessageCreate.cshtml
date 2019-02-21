@@ -1,0 +1,196 @@
+﻿@using Model.MessageViewModels
+@model MessageViewModel
+@{
+    ViewData["Title"] = "New message";
+}
+
+@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<table>
+    <tr class="row">
+        <td class="col-md-6">
+            <section>
+                <div class="form-group">
+                    <label>Recepient phone</label>
+                    <input id="recepientEditor" class="form-control" />
+                    <span asp-validation-for="PhoneRecepient" id="phoneError" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label>Recepient Name</label>
+                    <input id="recepientEditor" class="form-control" />
+                    <span asp-validation-for="Name" id="nameError" class="text-danger"></span>
+                </div>
+
+                <div>
+                    <button onclick="AddRecepient()">Add recepient</button>
+                    <button onclick="RemoveRecepient()">Remove recepient</button>
+                </div>
+
+                <br>
+
+                <div class="form-group">
+                    <label>Message text</label>
+                    <input id="messageEditor" class="form-control" />
+                </div>
+
+                <button type="submit" onclick="MakeModel()" id="sendMessage" class="btn btn-default">Send</button>
+
+                <div>
+                    <br />
+                    <label id="info"></label>
+                </div>
+
+            </section>
+        </td>
+        <td class="col-md-7">
+            <section aria-readonly="true">
+                <div class="form-group">
+                    <textarea id="phones" value="Add Message" rows="10" readonly="readonly"></textarea>
+                </div>
+            </section>
+        </td>
+    </tr>
+</table>
+
+<script type="text/javascript">
+    var phones = [];
+    var names = [];
+    function AddRecepient() {
+        var input = document.getElementById("recepientEditor");
+        var errorMessage = document.getElementById("phoneError");
+        var info = document.getElementById("info");
+        info.textContent = "";
+        errorMessage.textContent = "";
+        var reg = new RegExp("^[+][0-9]{12}$");
+        if (reg.test(input.value)) {
+            phones.push(input.value);
+            names.push(input.value);
+            var textarea = document.getElementById("phones");
+            var textarea = document.getElementById("names");
+
+            textarea.textContent += input.value + "\n";
+            input.value = "";
+        }
+        else {
+            errorMessage.textContent = "Incorrect phone number";
+        }
+    }
+    function RemoveRecepient() {
+        var input = document.getElementById("recepientEditor");
+        var errorMessage = document.getElementById("phoneError");
+        var info = document.getElementById("info");
+        info.textContent = "";
+        errorMessage.textContent = "";
+        if (phones.indexOf(input.value) == -1) {
+            errorMessage.textContent = "This phone not find in recepients list";
+        }
+        else {
+            var index = phones.indexOf(input.value);
+            phones.splice(index, 1)
+            textarea = document.getElementById("phones");
+            textarea.textContent = textarea.textContent.replace(input.value + "\n", "");
+            input.value = "";
+        }
+    }
+    function MakeModel() {
+        var message = document.getElementById("messageEditor")
+        var info = document.getElementById("info");
+        info.textContent = "";
+        if (phones.length == 0) {
+            info.style.color = "red"
+            info.textContent = "Recepiens list are empty";
+        }
+        else if (message.value == '') {
+            info.style.color = "red"
+            info.textContent = "Please, add text of message";
+        }
+        else {
+            var Message = {};
+            Message.TextMessage = message.value;
+            Message.Name = message.value;
+            Message.PhoneRecepient = phones;
+            $.ajax(
+                {
+                    url: '/Message/MessageCreate',
+                    //contentType: 'application/json; charset=utf-8',
+                    //dataType: 'json',
+                    type: 'POST',
+                    data: Message
+                });
+            info.style.color = "green"
+            info.textContent = "Messages are sended";
+        }
+    }
+</script>
+<!--
+    <table>
+        <tr class="row">
+            <td class="col-md-6">
+                <section>
+                    <div class="form-group">
+                        <label>Recepient phone</label>
+                        <input id="recepientEditor" class="form-control" />
+                        <span asp-validation-for="PhoneRecepient" id="phoneError" class="text-danger"></span>
+                    </div>
+
+                    <div>
+                        <button onclick="AddRecepient()">Add recepient</button>
+                        <button onclick="RemoveRecepient()">Remove recepient</button>
+                    </div>
+
+                    <br>
+
+                    <div class="form-group">
+                        <label>Message text</label>
+                        <input id="messageEditor" class="form-control" />
+                    </div>
+
+                    <button type="submit" onclick="MakeModel()" id="sendMessage" class="btn btn-default">Send</button>
+
+                    <div>
+                        <br />
+                        <label id="info"></label>
+                    </div>
+
+                </section>
+            </td>
+            <td class="col-md-7">
+                <section aria-readonly="true">
+                    <div class="form-group">
+                        <textarea id="phones" value="Add Message" rows="10" readonly="readonly"></textarea>
+                    </div>
+                </section>
+            </td>
+        </tr>
+    </table>-->
+<!--
+<div class="conteiner">
+    <form asp-controller="MessageCreate" asp-action="Create" class="form-horizontal" role="form">
+        <div class="form-group">
+            <label asp-for="PhoneRecepient" class="col-md-3" control-label></label>
+            <div class="col-md-9">
+                <input asp-for="PhoneRecepient" class="form-control" />
+                <span asp-validation-for="PhoneRecepient" class="text-danger"></span>>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="TextMessage" class="col-md-3" control-label></label>
+            <div class="col-md-9">
+                <input asp-for="TextMessage" class="form-control" />
+                <span asp-validation-for="TextMessage" class="text-danger"></span>>
+            </div>
+        </div>
+            <div class="col-md-9 col-sm-offset-3">
+                <button type="submit" onclick="MakeModel()" id="sendMessage" class="btn btn-default">Send</button>
+            </div>
+
+
+    </form>
+
+
+</div>
+-->

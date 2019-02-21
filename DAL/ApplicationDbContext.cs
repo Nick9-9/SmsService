@@ -11,7 +11,6 @@ namespace WebCustomerApp.Data
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Phone> Phones { get; set; }
-        public DbSet<AdditInform> AdditInforms { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<MessageRecipient> MessageRecipients { get; set; }
